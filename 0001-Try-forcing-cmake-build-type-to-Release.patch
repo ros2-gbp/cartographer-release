@@ -1,0 +1,25 @@
+From 801260442bfe7c70ebc7e8bddeb0aaf08084b66e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Steven!=20Ragnar=C3=B6k?= <steven@nuclearsandwich.com>
+Date: Thu, 8 Jun 2017 22:46:41 -0400
+Subject: [PATCH] Try forcing cmake build type to Release.
+
+---
+ debian/rules.em | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/debian/rules.em b/debian/rules.em
+index fde12b1..f074d24 100755
+--- a/debian/rules.em
++++ b/debian/rules.em
+@@ -26,7 +26,7 @@ override_dh_auto_configure:
+ 	# in the install tree that was dropped by catkin, and source it.  It will
+ 	# set things like CMAKE_PREFIX_PATH, PKG_CONFIG_PATH, and PYTHONPATH.
+ 	if [ -f "@(InstallationPrefix)/setup.sh" ]; then . "@(InstallationPrefix)/setup.sh"; fi && \
+-	dh_auto_configure @(debhelper_autoconfigure_options)
++	dh_auto_configure @(debhelper_autoconfigure_options) -DCMAKE_BUILD_TYPE=Release
+ 
+ override_dh_auto_build:
+ 	# In case we're installing to a non-standard location, look for a setup.sh
+-- 
+2.7.4
+
