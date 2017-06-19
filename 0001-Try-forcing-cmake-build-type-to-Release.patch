@@ -1,4 +1,4 @@
-From 801260442bfe7c70ebc7e8bddeb0aaf08084b66e Mon Sep 17 00:00:00 2001
+From 9dd7d5072aae210620060c816899dc9c4e089424 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Steven!=20Ragnar=C3=B6k?= <steven@nuclearsandwich.com>
 Date: Thu, 8 Jun 2017 22:46:41 -0400
 Subject: [PATCH] Try forcing cmake build type to Release.
