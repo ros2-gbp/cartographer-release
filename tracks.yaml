@@ -12,13 +12,13 @@ tracks:
       -i :{release_inc} --os-name debian --os-not-required
     - git-bloom-generate -y rosrpm --prefix release/:{ros_distro} :{ros_distro} -i
       :{release_inc}
-    devel_branch: ros2
+    devel_branch: release-beta2
     last_version: 0.1.0
     name: upstream
     patches: null
     release_inc: '2'
     release_repo_url: git@github.com:nuclearsandwich/cartographer-release
-    release_tag: ros2
+    release_tag: release-beta2
     ros_distro: r2b2
     vcs_type: git
     vcs_uri: https://github.com/ros2/cartographer.git
