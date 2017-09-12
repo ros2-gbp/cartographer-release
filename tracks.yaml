@@ -39,7 +39,7 @@ tracks:
     devel_branch: ros2
     last_version: 0.1.0
     name: upstream
-    patches: null
+    patches: ros2
     release_inc: '2'
     release_repo_url: git@github.com:nuclearsandwich/cartographer-release
     release_tag: ros2
