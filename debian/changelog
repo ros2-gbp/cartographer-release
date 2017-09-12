@@ -1,7 +1,0 @@
-ros-r2b3-cartographer (0.1.0-3xenial) xenial; urgency=high
-
-  * First unstable development release
-
- -- Chris Lalancette <clalancette@openrobotics.org>  Thu, 18 May 2017 04:00:00 -0000
-
-
