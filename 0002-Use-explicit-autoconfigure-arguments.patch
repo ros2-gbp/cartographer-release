@@ -1,4 +1,4 @@
-From c1f95dff01ec8823f7089f7455f2d7b4409b6d60 Mon Sep 17 00:00:00 2001
+From cd4799005f6ba5dda55c70e44a232ec2c98b3248 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Steven!=20Ragnar=C3=B6k?= <steven@nuclearsandwich.com>
 Date: Tue, 12 Sep 2017 10:33:48 -0400
 Subject: [PATCH 2/2] Use explicit autoconfigure arguments.
