@@ -16,7 +16,7 @@ tracks:
     last_version: 0.1.0
     name: upstream
     patches: ros2
-    release_inc: '8'
+    release_inc: '9'
     release_repo_url: git@github.com:nuclearsandwich/cartographer-release
     release_tag: master
     ros_distro: ardent
