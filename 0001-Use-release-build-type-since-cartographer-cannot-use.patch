@@ -1,4 +1,4 @@
-From 2c0761f12b4fad1eb84044dd18fe1c4609bd9281 Mon Sep 17 00:00:00 2001
+From 02392c71b7229a9354328b7b0c3f5e46cb925840 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Steven!=20Ragnar=C3=B6k?= <steven@nuclearsandwich.com>
 Date: Wed, 6 Dec 2017 22:10:50 -0800
 Subject: [PATCH] Use release build type since cartographer cannot use None.
