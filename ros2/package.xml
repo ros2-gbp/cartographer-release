@@ -46,6 +46,9 @@
   <depend>lua5.2-dev</depend>
   <depend>protobuf-dev</depend>
 
+  <test_depend>gmock_vendor</test_depend>
+  <test_depend>gtest_vendor</test_depend>
+
   <export>
     <build_type>cmake</build_type>
   </export>
