@@ -37,20 +37,16 @@
   <build_depend>python-sphinx</build_depend>
 
   <depend>boost</depend>
-  <depend>libceres-dev</depend>
   <depend>eigen</depend>
   <depend>libcairo2-dev</depend>
+  <depend>libceres-dev</depend>
   <depend>libgflags-dev</depend>
   <depend>libgoogle-glog-dev</depend>
   <depend>libwebp-dev</depend>
   <depend>lua5.2-dev</depend>
   <depend>protobuf-dev</depend>
 
-  <test_depend>gmock_vendor</test_depend>
-  <test_depend>gtest_vendor</test_depend>
-
   <export>
     <build_type>cmake</build_type>
   </export>
 </package>
-
