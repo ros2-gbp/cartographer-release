@@ -18,7 +18,7 @@ tracks:
     patches: null
     release_inc: '11'
     release_repo_url: git@github.com:nuclearsandwich/cartographer-release
-    release_tag: ros2
+    release_tag: 2.0.0
     ros_distro: ardent
     vcs_type: git
     vcs_uri: https://github.com/ros2/cartographer.git
