@@ -16,7 +16,7 @@ tracks:
     last_version: 2.0.0
     name: upstream
     patches: ardent
-    release_inc: '0'
+    release_inc: '1'
     release_repo_url: git@github.com:nuclearsandwich/cartographer-release
     release_tag: 2.0.0
     ros_distro: ardent
