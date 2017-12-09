@@ -36,6 +36,8 @@
   <!-- <build_depend>google-mock</build_depend> -->
   <build_depend>python-sphinx</build_depend>
 
+  <buildtool_depend>cmake</buildtool_depend>
+
   <depend>boost</depend>
   <depend>eigen</depend>
   <depend>libcairo2-dev</depend>
@@ -50,3 +52,4 @@
     <build_type>cmake</build_type>
   </export>
 </package>
+
