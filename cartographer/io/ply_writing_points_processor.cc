@@ -34,10 +34,10 @@ namespace {
 // 'output_file'.
 void WriteBinaryPlyHeader(const bool has_color, const int64 num_points,
                           FileWriter* const file_writer) {
-  string color_header = !has_color ? ""
-                                   : "property uchar red\n"
-                                     "property uchar green\n"
-                                     "property uchar blue\n";
+  std::string color_header = !has_color ? ""
+                                        : "property uchar red\n"
+                                          "property uchar green\n"
+                                          "property uchar blue\n";
   std::ostringstream stream;
   stream << "ply\n"
          << "format binary_little_endian 1.0\n"
@@ -48,7 +48,7 @@ void WriteBinaryPlyHeader(const bool has_color, const int64 num_points,
          << "property float y\n"
          << "property float z\n"
          << color_header << "end_header\n";
-  const string out = stream.str();
+  const std::string out = stream.str();
   CHECK(file_writer->WriteHeader(out.data(), out.size()));
 }
 
@@ -61,7 +61,7 @@ void WriteBinaryPlyPointCoordinate(const Eigen::Vector3f& point,
   CHECK(file_writer->Write(buffer, 12));
 }
 
-void WriteBinaryPlyPointColor(const Color& color,
+void WriteBinaryPlyPointColor(const Uint8Color& color,
                               FileWriter* const file_writer) {
   CHECK(file_writer->Write(reinterpret_cast<const char*>(color.data()),
                            color.size()));
@@ -71,7 +71,7 @@ void WriteBinaryPlyPointColor(const Color& color,
 
 std::unique_ptr<PlyWritingPointsProcessor>
 PlyWritingPointsProcessor::FromDictionary(
-    FileWriterFactory file_writer_factory,
+    const FileWriterFactory& file_writer_factory,
     common::LuaParameterDictionary* const dictionary,
     PointsProcessor* const next) {
   return common::make_unique<PlyWritingPointsProcessor>(
@@ -120,7 +120,7 @@ void PlyWritingPointsProcessor::Process(std::unique_ptr<PointsBatch> batch) {
   for (size_t i = 0; i < batch->points.size(); ++i) {
     WriteBinaryPlyPointCoordinate(batch->points[i], file_.get());
     if (has_colors_) {
-      WriteBinaryPlyPointColor(batch->colors[i], file_.get());
+      WriteBinaryPlyPointColor(ToUint8Color(batch->colors[i]), file_.get());
     }
     ++num_points_;
   }

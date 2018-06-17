@@ -35,29 +35,25 @@ struct RangeData {
   PointCloud misses;
 };
 
-// Converts 'range_data' to a proto::RangeData.
-proto::RangeData ToProto(const RangeData& range_data);
-
-// Converts 'proto' to a RangeData.
-RangeData FromProto(const proto::RangeData& proto);
+// Like 'RangeData', but with 'TimedPointClouds'.
+struct TimedRangeData {
+  Eigen::Vector3f origin;
+  TimedPointCloud returns;
+  TimedPointCloud misses;
+};
 
 RangeData TransformRangeData(const RangeData& range_data,
                              const transform::Rigid3f& transform);
 
+TimedRangeData TransformTimedRangeData(const TimedRangeData& range_data,
+                                       const transform::Rigid3f& transform);
+
 // Crops 'range_data' according to the region defined by 'min_z' and 'max_z'.
 RangeData CropRangeData(const RangeData& range_data, float min_z, float max_z);
 
-// Like RangeData but with compressed point clouds. The point order changes
-// when converting from RangeData.
-struct CompressedRangeData {
-  Eigen::Vector3f origin;
-  CompressedPointCloud returns;
-  CompressedPointCloud misses;
-};
-
-CompressedRangeData Compress(const RangeData& range_data);
-
-RangeData Decompress(const CompressedRangeData& compressed_range_Data);
+// Crops 'range_data' according to the region defined by 'min_z' and 'max_z'.
+TimedRangeData CropTimedRangeData(const TimedRangeData& range_data, float min_z,
+                                  float max_z);
 
 }  // namespace sensor
 }  // namespace cartographer

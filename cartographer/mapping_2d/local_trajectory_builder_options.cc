@@ -34,6 +34,8 @@ proto::LocalTrajectoryBuilderOptions CreateLocalTrajectoryBuilderOptions(
   options.set_max_z(parameter_dictionary->GetDouble("max_z"));
   options.set_missing_data_ray_length(
       parameter_dictionary->GetDouble("missing_data_ray_length"));
+  options.set_num_accumulated_range_data(
+      parameter_dictionary->GetInt("num_accumulated_range_data"));
   options.set_voxel_filter_size(
       parameter_dictionary->GetDouble("voxel_filter_size"));
   options.set_use_online_correlative_scan_matching(
@@ -41,6 +43,11 @@ proto::LocalTrajectoryBuilderOptions CreateLocalTrajectoryBuilderOptions(
   *options.mutable_adaptive_voxel_filter_options() =
       sensor::CreateAdaptiveVoxelFilterOptions(
           parameter_dictionary->GetDictionary("adaptive_voxel_filter").get());
+  *options.mutable_loop_closure_adaptive_voxel_filter_options() =
+      sensor::CreateAdaptiveVoxelFilterOptions(
+          parameter_dictionary
+              ->GetDictionary("loop_closure_adaptive_voxel_filter")
+              .get());
   *options.mutable_real_time_correlative_scan_matcher_options() =
       scan_matching::CreateRealTimeCorrelativeScanMatcherOptions(
           parameter_dictionary
@@ -54,9 +61,6 @@ proto::LocalTrajectoryBuilderOptions CreateLocalTrajectoryBuilderOptions(
           parameter_dictionary->GetDictionary("motion_filter").get());
   options.set_imu_gravity_time_constant(
       parameter_dictionary->GetDouble("imu_gravity_time_constant"));
-  options.set_num_odometry_states(
-      parameter_dictionary->GetNonNegativeInt("num_odometry_states"));
-  CHECK_GT(options.num_odometry_states(), 0);
   *options.mutable_submaps_options() = CreateSubmapsOptions(
       parameter_dictionary->GetDictionary("submaps").get());
   options.set_use_imu_data(parameter_dictionary->GetBool("use_imu_data"));

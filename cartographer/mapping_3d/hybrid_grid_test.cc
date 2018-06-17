@@ -40,33 +40,32 @@ TEST(HybridGridTest, ApplyOdds) {
 
   hybrid_grid.SetProbability(Eigen::Array3i(1, 0, 1), 0.5f);
 
-  hybrid_grid.StartUpdate();
   hybrid_grid.ApplyLookupTable(
       Eigen::Array3i(1, 0, 1),
       mapping::ComputeLookupTableToApplyOdds(mapping::Odds(0.9f)));
+  hybrid_grid.FinishUpdate();
   EXPECT_GT(hybrid_grid.GetProbability(Eigen::Array3i(1, 0, 1)), 0.5f);
 
   hybrid_grid.SetProbability(Eigen::Array3i(0, 1, 0), 0.5f);
 
-  hybrid_grid.StartUpdate();
   hybrid_grid.ApplyLookupTable(
       Eigen::Array3i(0, 1, 0),
       mapping::ComputeLookupTableToApplyOdds(mapping::Odds(0.1f)));
+  hybrid_grid.FinishUpdate();
   EXPECT_LT(hybrid_grid.GetProbability(Eigen::Array3i(0, 1, 0)), 0.5f);
 
   // Tests adding odds to an unknown cell.
-  hybrid_grid.StartUpdate();
   hybrid_grid.ApplyLookupTable(
       Eigen::Array3i(1, 1, 1),
       mapping::ComputeLookupTableToApplyOdds(mapping::Odds(0.42f)));
   EXPECT_NEAR(hybrid_grid.GetProbability(Eigen::Array3i(1, 1, 1)), 0.42f, 1e-4);
 
-  // Tests that further updates are ignored if StartUpdate() isn't called.
+  // Tests that further updates are ignored if FinishUpdate() isn't called.
   hybrid_grid.ApplyLookupTable(
       Eigen::Array3i(1, 1, 1),
       mapping::ComputeLookupTableToApplyOdds(mapping::Odds(0.9f)));
   EXPECT_NEAR(hybrid_grid.GetProbability(Eigen::Array3i(1, 1, 1)), 0.42f, 1e-4);
-  hybrid_grid.StartUpdate();
+  hybrid_grid.FinishUpdate();
   hybrid_grid.ApplyLookupTable(
       Eigen::Array3i(1, 1, 1),
       mapping::ComputeLookupTableToApplyOdds(mapping::Odds(0.9f)));
@@ -186,9 +185,8 @@ TEST_F(RandomHybridGridTest, TestIteration) {
 }
 
 TEST_F(RandomHybridGridTest, ToProto) {
-  const auto proto = ToProto(hybrid_grid_);
+  const auto proto = hybrid_grid_.ToProto();
   EXPECT_EQ(hybrid_grid_.resolution(), proto.resolution());
-
   ASSERT_EQ(proto.x_indices_size(), proto.y_indices_size());
   ASSERT_EQ(proto.x_indices_size(), proto.z_indices_size());
   ASSERT_EQ(proto.x_indices_size(), proto.values_size());
@@ -209,8 +207,6 @@ TEST_F(RandomHybridGridTest, ToProto) {
   EXPECT_EQ(proto_map, hybrid_grid_map);
 }
 
-namespace {
-
 struct EigenComparator {
   bool operator()(const Eigen::Vector3i& lhs, const Eigen::Vector3i& rhs) {
     return std::forward_as_tuple(lhs.x(), lhs.y(), lhs.z()) <
@@ -218,10 +214,8 @@ struct EigenComparator {
   }
 };
 
-}  // namespace
-
 TEST_F(RandomHybridGridTest, FromProto) {
-  const HybridGrid constructed_grid(ToProto(hybrid_grid_));
+  const HybridGrid constructed_grid(hybrid_grid_.ToProto());
 
   std::map<Eigen::Vector3i, float, EigenComparator> member_map(
       hybrid_grid_.begin(), hybrid_grid_.end());

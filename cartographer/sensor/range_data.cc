@@ -22,22 +22,6 @@
 namespace cartographer {
 namespace sensor {
 
-proto::RangeData ToProto(const RangeData& range_data) {
-  proto::RangeData proto;
-  *proto.mutable_origin() = transform::ToProto(range_data.origin);
-  *proto.mutable_point_cloud() = ToProto(range_data.returns);
-  *proto.mutable_missing_echo_point_cloud() = ToProto(range_data.misses);
-  return proto;
-}
-
-RangeData FromProto(const proto::RangeData& proto) {
-  auto range_data = RangeData{
-      transform::ToEigen(proto.origin()), ToPointCloud(proto.point_cloud()),
-      ToPointCloud(proto.missing_echo_point_cloud()),
-  };
-  return range_data;
-}
-
 RangeData TransformRangeData(const RangeData& range_data,
                              const transform::Rigid3f& transform) {
   return RangeData{
@@ -47,23 +31,27 @@ RangeData TransformRangeData(const RangeData& range_data,
   };
 }
 
-RangeData CropRangeData(const RangeData& range_data, const float min_z,
-                        const float max_z) {
-  return RangeData{range_data.origin, Crop(range_data.returns, min_z, max_z),
-                   Crop(range_data.misses, min_z, max_z)};
-}
-
-CompressedRangeData Compress(const RangeData& range_data) {
-  return CompressedRangeData{
-      range_data.origin, CompressedPointCloud(range_data.returns),
-      CompressedPointCloud(range_data.misses),
+TimedRangeData TransformTimedRangeData(const TimedRangeData& range_data,
+                                       const transform::Rigid3f& transform) {
+  return TimedRangeData{
+      transform * range_data.origin,
+      TransformTimedPointCloud(range_data.returns, transform),
+      TransformTimedPointCloud(range_data.misses, transform),
   };
 }
 
-RangeData Decompress(const CompressedRangeData& compressed_range_data) {
-  return RangeData{compressed_range_data.origin,
-                   compressed_range_data.returns.Decompress(),
-                   compressed_range_data.misses.Decompress()};
+RangeData CropRangeData(const RangeData& range_data, const float min_z,
+                        const float max_z) {
+  return RangeData{range_data.origin,
+                   CropPointCloud(range_data.returns, min_z, max_z),
+                   CropPointCloud(range_data.misses, min_z, max_z)};
+}
+
+TimedRangeData CropTimedRangeData(const TimedRangeData& range_data,
+                                  const float min_z, const float max_z) {
+  return TimedRangeData{range_data.origin,
+                        CropTimedPointCloud(range_data.returns, min_z, max_z),
+                        CropTimedPointCloud(range_data.misses, min_z, max_z)};
 }
 
 }  // namespace sensor

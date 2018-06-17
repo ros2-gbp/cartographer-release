@@ -31,7 +31,8 @@ namespace sensor {
 
 class Collator {
  public:
-  using Callback = std::function<void(const string&, std::unique_ptr<Data>)>;
+  using Callback =
+      std::function<void(const std::string&, std::unique_ptr<Data>)>;
 
   Collator() {}
 
@@ -41,8 +42,8 @@ class Collator {
   // Adds a trajectory to produce sorted sensor output for. Calls 'callback'
   // for each collated sensor data.
   void AddTrajectory(int trajectory_id,
-                     const std::unordered_set<string>& expected_sensor_ids,
-                     Callback callback);
+                     const std::unordered_set<std::string>& expected_sensor_ids,
+                     const Callback& callback);
 
   // Marks 'trajectory_id' as finished.
   void FinishTrajectory(int trajectory_id);
@@ -50,7 +51,7 @@ class Collator {
   // Adds 'data' for 'trajectory_id' to be collated. 'data' must contain valid
   // sensor data. Sensor packets with matching 'sensor_id' must be added in time
   // order.
-  void AddSensorData(int trajectory_id, const string& sensor_id,
+  void AddSensorData(int trajectory_id, const std::string& sensor_id,
                      std::unique_ptr<Data> data);
 
   // Dispatches all queued sensor packets. May only be called once.

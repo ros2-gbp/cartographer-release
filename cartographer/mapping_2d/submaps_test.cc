@@ -17,6 +17,8 @@
 #include "cartographer/mapping_2d/submaps.h"
 
 #include <map>
+#include <memory>
+#include <set>
 #include <string>
 
 #include "cartographer/common/lua_parameter_dictionary.h"
@@ -29,35 +31,63 @@ namespace cartographer {
 namespace mapping_2d {
 namespace {
 
-TEST(SubmapsTest, TheRightNumberOfScansAreInserted) {
+TEST(SubmapsTest, TheRightNumberOfRangeDataAreInserted) {
   constexpr int kNumRangeData = 10;
   auto parameter_dictionary = common::MakeDictionary(
       "return {"
       "resolution = 0.05, "
-      "half_length = 10., "
       "num_range_data = " +
       std::to_string(kNumRangeData) +
       ", "
-      "output_debug_images = false, "
       "range_data_inserter = {"
       "insert_free_space = true, "
       "hit_probability = 0.53, "
       "miss_probability = 0.495, "
       "},"
       "}");
-  Submaps submaps{CreateSubmapsOptions(parameter_dictionary.get())};
+  ActiveSubmaps submaps{CreateSubmapsOptions(parameter_dictionary.get())};
+  std::set<std::shared_ptr<Submap>> all_submaps;
   for (int i = 0; i != 1000; ++i) {
     submaps.InsertRangeData({Eigen::Vector3f::Zero(), {}, {}});
-    const int matching = submaps.matching_index();
-    // Except for the first, maps should only be returned after enough scans.
-    if (matching != 0) {
-      EXPECT_LE(kNumRangeData, submaps.Get(matching)->num_range_data);
+    // Except for the first, maps should only be returned after enough range
+    // data.
+    for (const auto& submap : submaps.submaps()) {
+      all_submaps.insert(submap);
+    }
+    if (submaps.matching_index() != 0) {
+      EXPECT_LE(kNumRangeData, submaps.submaps().front()->num_range_data());
     }
   }
-  for (int i = 0; i != submaps.size() - 2; ++i) {
-    // Submaps should not be left without the right number of scans in them.
-    EXPECT_EQ(kNumRangeData * 2, submaps.Get(i)->num_range_data);
+  int correct_num_range_data = 0;
+  for (const auto& submap : all_submaps) {
+    if (submap->num_range_data() == kNumRangeData * 2) {
+      ++correct_num_range_data;
+    }
   }
+  // Submaps should not be left without the right number of range data in them.
+  EXPECT_EQ(correct_num_range_data, all_submaps.size() - 2);
+}
+
+TEST(SubmapsTest, ToFromProto) {
+  Submap expected(MapLimits(1., Eigen::Vector2d(2., 3.), CellLimits(100, 110)),
+                  Eigen::Vector2f(4.f, 5.f));
+  mapping::proto::Submap proto;
+  expected.ToProto(&proto);
+  EXPECT_TRUE(proto.has_submap_2d());
+  EXPECT_FALSE(proto.has_submap_3d());
+  const auto actual = Submap(proto.submap_2d());
+  EXPECT_TRUE(expected.local_pose().translation().isApprox(
+      actual.local_pose().translation(), 1e-6));
+  EXPECT_TRUE(expected.local_pose().rotation().isApprox(
+      actual.local_pose().rotation(), 1e-6));
+  EXPECT_EQ(expected.num_range_data(), actual.num_range_data());
+  EXPECT_EQ(expected.finished(), actual.finished());
+  EXPECT_NEAR(expected.probability_grid().limits().resolution(),
+              actual.probability_grid().limits().resolution(), 1e-6);
+  EXPECT_TRUE(expected.probability_grid().limits().max().isApprox(
+      actual.probability_grid().limits().max(), 1e-6));
+  EXPECT_EQ(expected.probability_grid().limits().cell_limits().num_x_cells,
+            actual.probability_grid().limits().cell_limits().num_x_cells);
 }
 
 }  // namespace

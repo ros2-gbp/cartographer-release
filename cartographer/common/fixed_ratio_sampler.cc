@@ -16,10 +16,15 @@
 
 #include "cartographer/common/fixed_ratio_sampler.h"
 
+#include "glog/logging.h"
+
 namespace cartographer {
 namespace common {
 
-FixedRatioSampler::FixedRatioSampler(const double ratio) : ratio_(ratio) {}
+FixedRatioSampler::FixedRatioSampler(const double ratio) : ratio_(ratio) {
+  CHECK_GT(ratio, 0.);
+  CHECK_LE(ratio, 1.);
+}
 
 FixedRatioSampler::~FixedRatioSampler() {}
 
@@ -32,7 +37,7 @@ bool FixedRatioSampler::Pulse() {
   return false;
 }
 
-string FixedRatioSampler::DebugString() {
+std::string FixedRatioSampler::DebugString() {
   return std::to_string(num_samples_) + " (" +
          std::to_string(100. * num_samples_ / num_pulses_) + "%)";
 }

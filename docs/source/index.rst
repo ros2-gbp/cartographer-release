@@ -21,6 +21,7 @@ Cartographer
    :hidden:
 
    configuration
+   terminology
 
 `Cartographer`_ is a system that provides real-time simultaneous localization
 and mapping (`SLAM`_) in 2D and 3D across multiple platforms and sensor
@@ -28,6 +29,16 @@ configurations.
 
 .. _Cartographer: https://github.com/googlecartographer/cartographer
 .. _SLAM: https://en.wikipedia.org/wiki/Simultaneous_localization_and_mapping
+
+Technical Overview
+==================
+* High level system overview of Cartographer
+
+.. image:: high_level_system_overview.png
+     :target: https://github.com/googlecartographer/cartographer/blob/master/docs/source/high_level_system_overview.png
+
+.. To make modifications, edit the original Google Sketch and export a png.
+.. https://docs.google.com/drawings/d/1kCJ_dEbSvV83THCUfMikCPw7xFrTkrvRw5r6Ji8C90c/edit?usp=sharing
 
 Getting started
 ===============
@@ -55,17 +66,18 @@ On Ubuntu 14.04 (Trusty):
 
 .. literalinclude:: ../../scripts/install_debs.sh
   :language: bash
-  :linenos:
   :lines: 20-
 
 .. literalinclude:: ../../scripts/install_ceres.sh
   :language: bash
-  :linenos:
+  :lines: 20-
+
+.. literalinclude:: ../../scripts/install_proto3.sh
+  :language: bash
   :lines: 20-
 
 .. literalinclude:: ../../scripts/install_cartographer.sh
   :language: bash
-  :linenos:
   :lines: 20-
 
 .. _system-requirements:

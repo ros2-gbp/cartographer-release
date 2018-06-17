@@ -21,6 +21,8 @@ set(CARTOGRAPHER_MINOR_VERSION 0)
 set(CARTOGRAPHER_PATCH_VERSION 0)
 set(CARTOGRAPHER_VERSION ${CARTOGRAPHER_MAJOR_VERSION}.${CARTOGRAPHER_MINOR_VERSION}.${CARTOGRAPHER_PATCH_VERSION})
 set(CARTOGRAPHER_SOVERSION ${CARTOGRAPHER_MAJOR_VERSION}.${CARTOGRAPHER_MINOR_VERSION})
+option(BUILD_GRPC "build Cartographer gRPC support" false)
+set(GRPC_PLUGIN_PATH "/usr/local/bin/grpc_cpp_plugin")
 
 include("${PROJECT_SOURCE_DIR}/cmake/functions.cmake")
 google_initialize_cartographer_project()
@@ -30,7 +32,7 @@ find_package(Boost REQUIRED COMPONENTS iostreams)
 find_package(Ceres REQUIRED COMPONENTS SparseLinearAlgebraLibrary)
 find_package(Eigen3 REQUIRED)
 find_package(LuaGoogle REQUIRED)
-find_package(Protobuf REQUIRED)
+find_package(Protobuf 3.0.0 REQUIRED)
 
 include(FindPkgConfig)
 PKG_SEARCH_MODULE(CAIRO REQUIRED cairo>=1.12.16)
@@ -56,8 +58,20 @@ file(GLOB_RECURSE ALL_TESTS "*_test.cc")
 file(GLOB_RECURSE ALL_EXECUTABLES "*_main.cc")
 list(REMOVE_ITEM ALL_SRCS ${ALL_TESTS})
 list(REMOVE_ITEM ALL_SRCS ${ALL_EXECUTABLES})
+file(GLOB_RECURSE ALL_GRPC_FILES "cartographer_grpc/*")
+if (NOT ${BUILD_GRPC})
+  list_remove_item(ALL_SRCS ALL_GRPC_FILES)
+  list_remove_item(ALL_TESTS ALL_GRPC_FILES)
+  list_remove_item(ALL_EXECUTABLES ALL_GRPC_FILES)
+endif()
 
 file(GLOB_RECURSE ALL_PROTOS "*.proto")
+file(GLOB_RECURSE ALL_GRPC_SERVICES "*_service.proto")
+list(REMOVE_ITEM ALL_PROTOS ALL_GRPC_SERVICES)
+if (NOT ${BUILD_GRPC})
+  list_remove_item(ALL_PROTOS ALL_GRPC_FILES)
+endif()
+
 set(ALL_PROTO_SRCS)
 set(ALL_PROTO_HDRS)
 foreach(ABS_FIL ${ALL_PROTOS})
@@ -79,15 +93,52 @@ foreach(ABS_FIL ${ALL_PROTOS})
     VERBATIM
   )
 endforeach()
-
 set_source_files_properties(${ALL_PROTO_SRCS} ${ALL_PROTO_HDRS} PROPERTIES GENERATED TRUE)
 list(APPEND ALL_SRCS ${ALL_PROTO_SRCS} ${ALL_PROTO_HDRS})
+
+if(${BUILD_GRPC})
+  set(ALL_GRPC_SERVICE_SRCS)
+  set(ALL_GRPC_SERVICE_HDRS)
+  foreach(ABS_FIL ${ALL_GRPC_SERVICES})
+    file(RELATIVE_PATH REL_FIL ${PROJECT_SOURCE_DIR} ${ABS_FIL})
+    get_filename_component(DIR ${REL_FIL} DIRECTORY)
+    get_filename_component(FIL_WE ${REL_FIL} NAME_WE)
+
+    list(APPEND ALL_GRPC_SERVICE_SRCS "${PROJECT_BINARY_DIR}/${DIR}/${FIL_WE}.pb.cc")
+    list(APPEND ALL_GRPC_SERVICE_HDRS "${PROJECT_BINARY_DIR}/${DIR}/${FIL_WE}.pb.h")
+    list(APPEND ALL_GRPC_SERVICE_SRCS "${PROJECT_BINARY_DIR}/${DIR}/${FIL_WE}.grpc.pb.cc")
+    list(APPEND ALL_GRPC_SERVICE_HDRS "${PROJECT_BINARY_DIR}/${DIR}/${FIL_WE}.grpc.pb.h")
+
+    add_custom_command(
+      OUTPUT "${PROJECT_BINARY_DIR}/${DIR}/${FIL_WE}.pb.cc"
+             "${PROJECT_BINARY_DIR}/${DIR}/${FIL_WE}.pb.h"
+             "${PROJECT_BINARY_DIR}/${DIR}/${FIL_WE}.grpc.pb.cc"
+             "${PROJECT_BINARY_DIR}/${DIR}/${FIL_WE}.grpc.pb.h"
+      COMMAND  ${PROTOBUF_PROTOC_EXECUTABLE}
+      ARGS --grpc_out  ${PROJECT_BINARY_DIR}
+        --cpp_out  ${PROJECT_BINARY_DIR}
+        -I ${PROJECT_SOURCE_DIR}
+        --plugin=protoc-gen-grpc=${GRPC_PLUGIN_PATH}
+        ${ABS_FIL}
+      DEPENDS ${ABS_FIL}
+      COMMENT "Running C++ protocol buffer compiler with gRPC support on ${ABS_FIL}"
+      VERBATIM
+    )
+  endforeach()
+  set_source_files_properties(${ALL_GRPC_SERVICE_SRCS} ${ALL_GRPC_SERVICE_HDRS} PROPERTIES GENERATED TRUE)
+  list(APPEND ALL_SRCS ${ALL_GRPC_SERVICE_SRCS} ${ALL_GRPC_SERVICE_HDRS})
+endif()
 
 add_library(${PROJECT_NAME} ${ALL_SRCS})
 
 configure_file(
   ${PROJECT_SOURCE_DIR}/cartographer/common/config.h.cmake
   ${PROJECT_BINARY_DIR}/cartographer/common/config.h)
+
+google_binary(cartographer_autogenerate_ground_truth
+  SRCS
+    cartographer/ground_truth/autogenerate_ground_truth_main.cc
+)
 
 google_binary(cartographer_compute_relations_metrics
   SRCS
@@ -118,8 +169,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC ${LUA_LIBRARIES})
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
   "${Boost_INCLUDE_DIRS}")
 target_link_libraries(${PROJECT_NAME} PUBLIC ${Boost_LIBRARIES})
-
-target_link_libraries(${PROJECT_NAME} PUBLIC webp)
 
 # We expect find_package(Ceres) to have located these for us.
 target_link_libraries(${PROJECT_NAME} PUBLIC glog)
@@ -178,7 +227,7 @@ file(GLOB_RECURSE hdrs "*.h.in")
 foreach(HDR ${hdrs})
   file(RELATIVE_PATH REL_FIL ${PROJECT_SOURCE_DIR} ${HDR})
   get_filename_component(DIR ${REL_FIL} DIRECTORY)
-  get_filename_component(FIL_WE ${REL_FIL} NAME_WE)
+  get_filename_component(FILE_WE ${REL_FIL} NAME_WE)
   install(
     FILES
       ${PROJECT_BINARY_DIR}/${DIR}/${FILE_WE}
