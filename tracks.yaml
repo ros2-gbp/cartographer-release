@@ -61,9 +61,11 @@ tracks:
     - git-bloom-generate -y rosrpm --prefix release/:{ros_distro} :{ros_distro} -i
       :{release_inc}
     devel_branch: ros2
+    last_release: 1.0.0-ros2-1
+    last_version: 1.0.0
     name: cartographer
     patches: null
-    release_inc: 0
+    release_inc: '1'
     release_repo_url: https://github.com/ros2-gbp/cartographer-release.git
     release_tag: :{version}-ros2-1
     ros_distro: crystal
