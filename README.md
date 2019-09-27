@@ -1,3 +1,26 @@
+## cartographer (eloquent) - 1.0.0-1
+
+The packages in the `cartographer` repository were released into the `eloquent` distro by running `/usr/bin/bloom-release --track eloquent --rosdistro eloquent cartographer` on `Fri, 27 Sep 2019 12:55:00 -0000`
+
+The `cartographer` package was released.
+
+Version of package(s) in repository `cartographer`:
+
+- upstream repository: https://github.com/ros2/cartographer.git
+- release repository: unknown
+- rosdistro version: `null`
+- old version: `null`
+- new version: `1.0.0-1`
+
+Versions of tools used:
+
+- bloom version: `0.8.0`
+- catkin_pkg version: `0.4.13`
+- rosdep version: `0.16.1`
+- rosdistro version: `0.7.4`
+- vcstools version: `0.1.42`
+
+
 ## cartographer (dashing) - 1.0.0-1
 
 The packages in the `cartographer` repository were released into the `dashing` distro by running `/usr/bin/bloom-release --track dashing --rosdistro dashing cartographer` on `Mon, 29 Apr 2019 16:40:52 -0000`
