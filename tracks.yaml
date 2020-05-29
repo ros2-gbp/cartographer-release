@@ -87,7 +87,7 @@ tracks:
       :{release_inc}
     devel_branch: ros2
     last_release: 1.0.0-ros2-1
-    last_version: 1.0.0
+    last_version: 1.0.9000
     name: cartographer
     patches: null
     release_inc: '1'
