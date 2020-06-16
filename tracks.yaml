@@ -217,5 +217,4 @@ tracks:
     ros_distro: rolling
     vcs_type: git
     vcs_uri: https://github.com/ros2/cartographer.git
-    version: 1.0.9001
-    version_saved: :{auto}
+    version: :{auto}
