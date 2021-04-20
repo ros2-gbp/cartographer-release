@@ -165,7 +165,7 @@ tracks:
     last_version: 1.0.9001
     name: cartographer
     patches: null
-    release_inc: '2'
+    release_inc: '3'
     release_repo_url: https://github.com/ros2-gbp/cartographer-release.git
     release_tag: :{version}
     ros_distro: galactic
