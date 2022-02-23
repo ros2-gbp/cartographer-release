@@ -38,7 +38,7 @@
   2.0.9020 -> upstream 2.0.2
   and so on...
   -->
-  <version>2.0.9000</version>
+  <version>2.0.9001</version>
   <description>
     Cartographer is a system that provides real-time simultaneous localization
     and mapping (SLAM) in 2D and 3D across multiple platforms and sensor
@@ -65,6 +65,7 @@
 
   <depend>libboost-iostreams-dev</depend>
   <depend>eigen</depend>
+  <depend>libabsl-dev</depend>
   <depend>libcairo2-dev</depend>
   <depend>libceres-dev</depend>
   <depend>libgflags-dev</depend>
