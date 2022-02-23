@@ -135,7 +135,7 @@ tracks:
       -i :{release_inc} --os-name debian --os-not-required
     - git-bloom-generate -y rosrpm --prefix release/:{ros_distro} :{ros_distro} -i
       :{release_inc}
-    devel_branch: ros2
+    devel_branch: foxy
     last_version: 1.0.9001
     name: cartographer
     patches: null
@@ -161,7 +161,7 @@ tracks:
       :{release_inc} --os-name fedora
     - git-bloom-generate -y rosrpm --prefix release/:{ros_distro} :{ros_distro} -i
       :{release_inc} --os-name rhel
-    devel_branch: ros2
+    devel_branch: foxy
     last_version: 1.0.9001
     name: cartographer
     patches: null
