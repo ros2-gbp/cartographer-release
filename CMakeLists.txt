@@ -228,8 +228,6 @@ target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
   "${EIGEN3_INCLUDE_DIR}")
 target_link_libraries(${PROJECT_NAME} PUBLIC ${EIGEN3_LIBRARIES})
 
-target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
-  "${CERES_INCLUDE_DIRS}")
 target_link_libraries(${PROJECT_NAME} PUBLIC ${CERES_LIBRARIES})
 
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
