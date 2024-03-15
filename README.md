@@ -1,3 +1,26 @@
+## cartographer (humble) - 2.0.9003-1
+
+The packages in the `cartographer` repository were released into the `humble` distro by running `/usr/bin/bloom-release --track humble --rosdistro humble cartographer` on `Fri, 15 Mar 2024 14:32:15 -0000`
+
+The `cartographer` package was released.
+
+Version of package(s) in repository `cartographer`:
+
+- upstream repository: https://github.com/ros2/cartographer.git
+- release repository: https://github.com/ros2-gbp/cartographer-release.git
+- rosdistro version: `2.0.9002-2`
+- old version: `2.0.9002-2`
+- new version: `2.0.9003-1`
+
+Versions of tools used:
+
+- bloom version: `0.11.2`
+- catkin_pkg version: `1.0.0`
+- rosdep version: `0.22.2`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## cartographer (iron) - 2.0.9003-1
 
 The packages in the `cartographer` repository were released into the `iron` distro by running `/usr/bin/bloom-release --track iron --rosdistro iron cartographer` on `Fri, 15 Mar 2024 14:30:26 -0000`
