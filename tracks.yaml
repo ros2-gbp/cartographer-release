@@ -275,8 +275,7 @@ tracks:
     ros_distro: kilted
     vcs_type: git
     vcs_uri: https://github.com/ros2/cartographer.git
-    version: 2.0.9003
-    version_saved: :{auto}
+    version: :{auto}
   r2b2:
     actions:
     - bloom-export-upstream :{vcs_local_uri} :{vcs_type} --tag :{release_tag} --display-uri
