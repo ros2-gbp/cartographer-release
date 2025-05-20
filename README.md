@@ -1,3 +1,26 @@
+## cartographer (kilted) - 2.0.9004-1
+
+The packages in the `cartographer` repository were released into the `kilted` distro by running `/usr/bin/bloom-release --track kilted --rosdistro kilted cartographer` on `Tue, 20 May 2025 23:32:43 -0000`
+
+The `cartographer` package was released.
+
+Version of package(s) in repository `cartographer`:
+
+- upstream repository: https://github.com/ros2/cartographer.git
+- release repository: https://github.com/ros2-gbp/cartographer-release.git
+- rosdistro version: `2.0.9003-2`
+- old version: `2.0.9003-2`
+- new version: `2.0.9004-1`
+
+Versions of tools used:
+
+- bloom version: `0.12.0`
+- catkin_pkg version: `1.0.0`
+- rosdep version: `0.25.1`
+- rosdistro version: `1.0.1`
+- vcstools version: `0.1.42`
+
+
 ## cartographer (rolling) - 2.0.9004-1
 
 The packages in the `cartographer` repository were released into the `rolling` distro by running `/usr/bin/bloom-release --track rolling --rosdistro rolling cartographer` on `Tue, 20 May 2025 23:30:17 -0000`
