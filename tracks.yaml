@@ -339,6 +339,8 @@ tracks:
       :{release_inc} --os-name fedora
     - git-bloom-generate -y rosrpm --prefix release/:{ros_distro} :{ros_distro} -i
       :{release_inc} --os-name rhel
+    - git-bloom-generate -y rosdynrpm --prefix release/:{ros_distro} :{ros_distro}
+      -i :{release_inc} --require-os fedora rhel
     devel_branch: ros2
     last_version: 2.0.9004
     name: cartographer
